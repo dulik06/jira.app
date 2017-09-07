@@ -1,0 +1,148 @@
+import React from "react";
+import axios from 'axios'
+import PropTypes from 'prop-types';
+import InputArea from "./InputArea";
+import SubbmitBotton from "./SubbmitBotton";
+import TextArea from './TextArea';
+import AttachArea from './AttachArea';
+
+
+
+export class Form extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {whatQuestion1:"", whatQuestion2: "", whatQuestion3:"", whatQuestion4: "", whenQuestion1: "", whenQuestion2: "", whereQuestion1: "", whereQuestion2: "", whoQuestion1: "", whoQuestion2: "", howQuestion1: "", backgroundColor: "grey"  }
+  }
+
+  changeInput1(newInput) {
+    this.setState({whatQuestion1: newInput})
+  }
+
+  changeInput2(newInput) {
+    this.setState({whatQuestion2: newInput})
+  }
+  changeInput3(newInput) {
+    this.setState({whatQuestion3: newInput})
+  }
+
+  changeInput4(newInput) {
+    this.setState({whatQuestion4: newInput})
+  }
+
+  changeInput5(newInput) {
+  this.setState({whenQuestion1: newInput})
+}
+
+  changeInput6(newInput) {
+    this.setState({whenQuestion2: newInput})
+  }
+
+  changeInput7(newInput) {
+    this.setState({whoQuestion1: newInput});
+  }
+
+  changeInput8(newInput) {
+    this.setState({whoQuestion2: newInput});
+  }
+
+  changeInput9(newInput) {
+    this.setState({whereQuestion1: newInput});
+  }
+
+  changeInput10(newInput) {
+    this.setState({whereQuestion2: newInput});
+  }
+
+  changeInput11(newInput) {
+    this.setState({howQuestion1: newInput});
+  }
+  changeColor() {
+    this.setState({backgroundColor: });
+  }
+
+/*isNotReady(){
+    const answers = this.state;
+    if (Object.values(answers) == "") {
+      console.log(Object.values(answers).length);
+    }else {
+      console.log(Object.values(answers));
+    }
+  }*/
+
+
+  isNotFormReadyToSubmit() {   //disable submittbutton !this.isFormReadyToSubmit()
+    const answers = this.state;
+    for (let answer in answers) {
+      if(answers[answer] == '') {
+        console.log("Not ready yet");
+        return true;
+      }
+    }
+
+// reduce mdn
+  }
+
+  handleSubmit(e) {  ///build formData
+    if (this.isNotFormReadyToSubmit()) {
+      return alert("not ready");
+    }else {
+      alert('Was submitted: ' + this.state.whatQuestion1 + ", " + this.state.whatQuestion2 + ", " + this.state.whatQuestion3 + ", " + this.state.managementInputText);
+      e.preventDefault();
+      axios.post('/ala', JSON.parse(data))
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+  }
+
+  render() {
+    return (
+      <form style={{textAlign: "center", marginTop: 50}} onSubmit={this.handleSubmit.bind(this)}>
+        <div className="fields-container">
+          <div>
+            { this.isNotFormReadyToSubmit()}
+            <h1 className="main-title">{this.props.headerWhat}</h1>
+            <TextArea value={this.state.whatQuestion1} onChange={this.changeInput1.bind(this)} label="What did you do?"/>
+            <TextArea value={this.state.whatQuestion2} onChange={this.changeInput2.bind(this)} label="What happened?"/>
+            <TextArea value={this.state.whatQuestion3} onChange={this.changeInput3.bind(this)} label="What did you expect to happen?"/>
+            <AttachArea value={this.state.whatQuestion4} onChange={this.changeInput4.bind(this)} label="Add a screenshot if you can."/>
+          </div>
+          <div>
+            <h1 className="main-title">{this.props.headerWhen}</h1>
+            <TextArea value={this.state.whenQuestion1} onChange={this.changeInput5.bind(this)} label="When did you encountered the bug"/>
+            <TextArea value={this.state.whenQuestion2} onChange={this.changeInput6.bind(this)} label="Did you encountered the same bug multiple times?"/>
+          </div>
+          <div>
+            <h1 className="main-title">{this.props.headerWho}</h1>
+            <InputArea value={this.state.whoQuestion1} onChange={this.changeInput7.bind(this)} label="Add the user_id and or factoring_application_id"/>
+            <InputArea value={this.state.whoQuestion2} onChange={this.changeInput8.bind(this)} label="If applicable, who talked to the user?"/>
+          </div>
+          <div>
+            <h1 className="main-title">{this.props.headerWhere}</h1>
+            <InputArea value={this.state.whereQuestion1} onChange={this.changeInput9.bind(this)} label="Add the user_id and or factoring_application_id"/>
+            <InputArea value={this.state.whereQuestion2} onChange={this.changeInput10.bind(this)} label="If applicable, who talked to the user?"/>
+          </div>
+          <div>
+            <br/><br/><br/>
+            <TextArea value={this.state.howQuestion1} onChange={this.changeInput11.bind(this)} label="Describe how to reproduce the bug"/>
+          </div>
+
+        </div>
+        <SubbmitBotton disabled= {this.isNotFormReadyToSubmit()} col={this.state.backgroundColor}/>
+      </form>
+
+    );
+  }
+}
+
+Form.propTypes = {
+  headerWhat: PropTypes.string.isRequired,
+  headerWhen: PropTypes.string.isRequired,
+  headerWho: PropTypes.string.isRequired,
+  headerWhere: PropTypes.string.isRequired,
+};
+
+export default Form;
